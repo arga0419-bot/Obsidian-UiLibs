@@ -8583,33 +8583,47 @@ function Library:CreateWindow(WindowInfo)
     if WindowInfo.AutoShow and not Library.ActiveLoading then
         task.spawn(Library.Toggle)
     end
-        if Library.IsMobile then
+    if Library.IsMobile then
         local ToggleButton
         local function CreateSquareMobileButton(IconName)
             local T = {}
             local Btn = New("TextButton", {
                 BackgroundColor3 = "BackgroundColor",
                 Position = UDim2.fromOffset(6, 6),
-                Size = UDim2.fromOffset(36, 36),
+                -- UBAH UKURAN DI SINI (Pastikan X dan Y sama persis)
+                Size = UDim2.fromOffset(40, 40), 
                 Text = "",
                 ZIndex = 10,
                 Parent = ScreenGui,
             })
+            
+            -- INI YANG MEMBUAT BULAT SEMPURNA
+            local corner = Instance.new("UICorner")
+            corner.CornerRadius = UDim.new(1, 0) -- 1, 0 artinya 100% lingkaran
+            corner.Parent = Btn
+            
             Library:AddOutline(Btn)
+            
             local BtnIcon = New("ImageLabel", {
                 BackgroundTransparency = 1,
+                -- Menempatkan ikon tepat di tengah tombol
                 AnchorPoint = Vector2.new(0.5, 0.5),
                 Position = UDim2.fromScale(0.5, 0.5),
-                Size = UDim2.fromOffset(22, 22),
+                -- Ukuran ikon (0.6 artinya 60% dari ukuran tombol)
+                Size = UDim2.fromScale(0.6, 0.6),
+                -- Mengunci bentuk ikon agar tetap 1:1 (tidak gepeng)
+                SizeConstraint = Enum.SizeConstraint.RelativeXY, 
                 ZIndex = 11,
                 Parent = Btn,
             })
+            
             local IconData = Library:GetCustomIcon(IconName)
             if IconData then
                 BtnIcon.Image = IconData.Url
                 BtnIcon.ImageRectOffset = IconData.ImageRectOffset
                 BtnIcon.ImageRectSize = IconData.ImageRectSize
             end
+            
             Library:MakeDraggable(Btn, Btn, true)
             T.Button = Btn
             T.Icon = BtnIcon
@@ -8619,21 +8633,17 @@ function Library:CreateWindow(WindowInfo)
             return T
         end
         
-        -- GANTI "menu" DI BAWAH INI DENGAN ASSET ID / LINK LOGO KAMU
-        -- Contoh pakai ID: "rbxassetid://95816097006870"
         ToggleButton = CreateSquareMobileButton("rbxassetid://132936236583463")
-        
         ToggleButton.Button.MouseButton1Click:Connect(function()
             Library:Toggle()
         end)
+        
+        -- LockButton sudah dihapus
 
         if WindowInfo.MobileButtonsSide == "Right" then
             ToggleButton.Button.Position = UDim2.new(1, -6, 0, 6)
             ToggleButton.Button.AnchorPoint = Vector2.new(1, 0)
-        else
-            ToggleButton.Button.Position = UDim2.fromOffset(6, 6)
         end
-        
         if WindowInfo.ShowMobileButtons == false then
             ToggleButton.Button.Visible = false
         end
