@@ -8583,9 +8583,8 @@ function Library:CreateWindow(WindowInfo)
     if WindowInfo.AutoShow and not Library.ActiveLoading then
         task.spawn(Library.Toggle)
     end
-    if Library.IsMobile then
+        if Library.IsMobile then
         local ToggleButton
-        local LockButton
         local function CreateSquareMobileButton(IconName)
             local T = {}
             local Btn = New("TextButton", {
@@ -8619,31 +8618,24 @@ function Library:CreateWindow(WindowInfo)
             end
             return T
         end
-        ToggleButton = CreateSquareMobileButton("menu")
+        
+        -- GANTI "menu" DI BAWAH INI DENGAN ASSET ID / LINK LOGO KAMU
+        -- Contoh pakai ID: "rbxassetid://95816097006870"
+        ToggleButton = CreateSquareMobileButton("rbxassetid://109928123357793")
+        
         ToggleButton.Button.MouseButton1Click:Connect(function()
             Library:Toggle()
         end)
-        LockButton = CreateSquareMobileButton("lock")
-        LockButton:SetIconColor(Color3.fromRGB(220, 50, 50))
-        LockButton.Button.MouseButton1Click:Connect(function()
-            Library.CantDragForced = not Library.CantDragForced
-            if Library.CantDragForced then
-                LockButton:SetIconColor(Color3.fromRGB(0, 210, 80))
-            else
-                LockButton:SetIconColor(Color3.fromRGB(220, 50, 50))
-            end
-        end)
+
         if WindowInfo.MobileButtonsSide == "Right" then
             ToggleButton.Button.Position = UDim2.new(1, -6, 0, 6)
             ToggleButton.Button.AnchorPoint = Vector2.new(1, 0)
-            LockButton.Button.Position = UDim2.new(1, -6, 0, 46)
-            LockButton.Button.AnchorPoint = Vector2.new(1, 0)
         else
-            LockButton.Button.Position = UDim2.fromOffset(6, 46)
+            ToggleButton.Button.Position = UDim2.fromOffset(6, 6)
         end
+        
         if WindowInfo.ShowMobileButtons == false then
             ToggleButton.Button.Visible = false
-            LockButton.Button.Visible = false
         end
     end
     SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
